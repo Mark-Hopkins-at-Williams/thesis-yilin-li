@@ -1,11 +1,11 @@
 import os
 from pathlib import Path
-from tokenizers import ByteLevelBPETokenizer
+from tokenizers import BertWordPieceTokenizer
 
 paths = [str(x) for x in Path(".").glob("Data/*.txt")]
 
 # Initialize a tokenizer
-tokenizer = ByteLevelBPETokenizer()
+tokenizer = BertWordPieceTokenizer()
 
 # Customize training
 tokenizer.train(files=paths, vocab_size=52_000, min_frequency=2, special_tokens=[
@@ -16,6 +16,6 @@ tokenizer.train(files=paths, vocab_size=52_000, min_frequency=2, special_tokens=
     "<mask>",
 ])
 
-if not os.path.isdir("./RoBertMLM"):
-    os.mkdir("RoBertMLM")
-tokenizer.save_model("RoBertMLM")
+if not os.path.isdir("./BertMLM"):
+    os.mkdir("BertMLM")
+tokenizer.save_model("BertMLM")
