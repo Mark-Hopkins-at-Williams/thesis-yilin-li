@@ -19,13 +19,13 @@ model = BertForMaskedLM(config=config)
 
 train_dataset = LineByLineTextDataset(
     tokenizer=tokenizer,
-    file_path="./Data/Pride_and_Prejudice.txt",
+    file_path="./Data/train.en.txt",
     block_size=128,
 )
 
 val_dataset = LineByLineTextDataset(
     tokenizer=tokenizer,
-    file_path="./Data/Mansfield_Park.txt",
+    file_path="./Data/train.en.txt",
     block_size=128,
 )
 
