@@ -3,7 +3,7 @@ from torch.utils.data import Dataset
 from tokenizers import ByteLevelBPETokenizer
 from os.path import join
 
-paths = [str(x) for x in Path("./eo_data/").glob("**/*.txt")]
+paths = ["./synthetic/synth.txt"]
 VOCAB_SIZE = 52_000
 model_dir = './esperberto'
 
