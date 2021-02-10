@@ -3,7 +3,7 @@ from torch.utils.data import Dataset
 from tokenizers import ByteLevelBPETokenizer
 from os.path import join
 
-paths = ["./synthetic/synth.txt"]
+paths = [str(x) for x in Path("./synthetic/").glob("*.txt")]
 VOCAB_SIZE = 52_000
 model_dir = './esperberto'
 
@@ -80,7 +80,7 @@ def init_trainer():
     from transformers import LineByLineTextDataset
     dataset = LineByLineTextDataset(
         tokenizer=tokenizer,
-        file_path="./eo_data/oscar.eo.txt",
+        file_path="./synthetic/synth.txt",
         block_size=128,
     )
     from transformers import DataCollatorForLanguageModeling
@@ -118,8 +118,8 @@ def validate_training():
         model=model_dir,
         tokenizer=model_dir
     )
-    fill_mask("La suno <mask>.")
-    fill_mask("Jen la komenco de bela <mask>.")
+    fill_mask("You drink the <mask>")
+    fill_mask("You <mask> off")
 
 
 def pipeline():
@@ -127,3 +127,5 @@ def pipeline():
     trainer = init_trainer()
     start_training(trainer)
     validate_training()
+
+pipeline()
