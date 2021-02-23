@@ -3,9 +3,9 @@ from torch.utils.data import Dataset
 from tokenizers import ByteLevelBPETokenizer
 from os.path import join
 
-paths = [str(x) for x in Path("./synthetic/").glob("*.txt")]
+paths = [str(x) for x in Path("../Data/").glob("*.txt")]
 VOCAB_SIZE = 52_000
-model_dir = './esperberto'
+model_dir = './train_en'
 
 
 def create_tokenizer():
@@ -14,7 +14,7 @@ def create_tokenizer():
                     vocab_size=VOCAB_SIZE,
                     min_frequency=2,
                     special_tokens=["<s>", "<pad>", "</s>", "<unk>", "<mask>"])
-    tokenizer.save_model(".", "esperberto")
+    tokenizer.save_model(".", "train_en")
 
 
 def validate_tokenizer():
@@ -31,9 +31,6 @@ def validate_tokenizer():
         ("<s>", tokenizer.token_to_id("<s>")),
     )
     tokenizer.enable_truncation(max_length=512)
-    print(
-        tokenizer.encode("Mi estas Julien.")
-    )
 
 
 class EsperantoDataset(Dataset):
@@ -80,7 +77,7 @@ def init_trainer():
     from transformers import LineByLineTextDataset
     dataset = LineByLineTextDataset(
         tokenizer=tokenizer,
-        file_path="./synthetic/synth.txt",
+        file_path="../Data/train.en.txt",
         block_size=128,
     )
     from transformers import DataCollatorForLanguageModeling
@@ -118,8 +115,7 @@ def validate_training():
         model=model_dir,
         tokenizer=model_dir
     )
-    fill_mask("You drink the <mask>")
-    fill_mask("You <mask> off")
+    print(fill_mask("Paris is the <mask> of France"))
 
 
 def pipeline():
