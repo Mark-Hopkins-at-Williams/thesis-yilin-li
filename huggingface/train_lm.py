@@ -14,7 +14,7 @@ def create_tokenizer():
                     vocab_size=VOCAB_SIZE,
                     min_frequency=2,
                     special_tokens=["<s>", "<pad>", "</s>", "<unk>", "<mask>"])
-    tokenizer.save_model(".", "./train_en")
+    tokenizer.save_model("train_en")
 
 
 def validate_tokenizer():
