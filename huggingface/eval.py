@@ -1,4 +1,4 @@
-from transoformers import pipeline
+from transformers import pipeline
 
 fill_mask = pipeline(
     "fill-mask",
