@@ -89,7 +89,7 @@ def init_trainer():
         output_dir=model_dir,
         overwrite_output_dir=True,
         num_train_epochs=1,
-        per_gpu_train_batch_size=32,
+        per_gpu_train_batch_size=1,
         save_steps=10_000,
         save_total_limit=2,
     )
