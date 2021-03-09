@@ -44,7 +44,7 @@ def init_trainer():
         #type_vocab_size=1,
     )
     tokenizer = GPT2Tokenizer.from_pretrained(model_dir, max_len=512)
-    model = GPT2Model(config=config)
+    model = GPT2LMHeadModel(config=config)
     print('Num parameters: {}'.format(model.num_parameters()))
     from transformers import TextDataset
     dataset = TextDataset(
