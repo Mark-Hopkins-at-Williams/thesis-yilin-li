@@ -3,9 +3,9 @@ from torch.utils.data import Dataset
 from tokenizers import ByteLevelBPETokenizer
 from os.path import join
 
-paths = [str(x) for x in Path("./Data/").glob("*.txt")]
+paths = [str(x) for x in Path("./Data_non/").glob("*.txt")]
 VOCAB_SIZE = 52_000
-model_dir = './BBPE_spaced'
+model_dir = './BBPE_non_spaced'
 
 
 def create_tokenizer():
@@ -49,7 +49,7 @@ def init_trainer():
     from transformers import TextDataset
     dataset = TextDataset(
         tokenizer=tokenizer,
-        file_path="./Data/train.en.txt",
+        file_path="./Data_non/train_no_space.en.txt",
         block_size=128,
     )
     from transformers import DataCollatorForLanguageModeling
