@@ -1,19 +1,20 @@
 from pathlib import Path
 from torch.utils.data import Dataset
-from tokenizers import ByteLevelBPETokenizer
+from tokenizers import ByteLevelBPETokenizer, CharBPETokenizer
 from os.path import join
 
 paths = [str(x) for x in Path("./Data/").glob("*.txt")]
 VOCAB_SIZE = 52_000
-model_dir = './BBPE_spaced'
+model_dir = './BPE_spaced'
 
 
 def create_tokenizer():
-    tokenizer = ByteLevelBPETokenizer()
+    #tokenizer = ByteLevelBPETokenizer()
+    tokenizer = CharBPETokenizer()
     tokenizer.train(files=paths,
                     vocab_size=VOCAB_SIZE,
                     min_frequency=2,
-                    special_tokens=["<s>", "<pad>", "</s>", "<unk>", "<mask>"])
+                    special_tokens=["<s>", "<pad>", "</s>", "<unk>", "<mask>", "</w>"])
     tokenizer.save_model(model_dir)
 
 
@@ -61,7 +62,7 @@ def init_trainer():
         output_dir=model_dir,
         overwrite_output_dir=True,
         num_train_epochs=1,
-        per_gpu_train_batch_size=16,
+        per_gpu_train_batch_size=1,
         save_steps=10_000,
         save_total_limit=2,
     )
@@ -70,7 +71,7 @@ def init_trainer():
         args=training_args,
         data_collator=data_collator,
         train_dataset=dataset,
-        prediction_loss_only=True,
+        #prediction_loss_only=True,
     )
     return trainer
 
