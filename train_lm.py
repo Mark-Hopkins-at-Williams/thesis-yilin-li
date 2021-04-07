@@ -1,6 +1,8 @@
 from pathlib import Path
 from torch.utils.data import Dataset
-from tokenizers import ByteLevelBPETokenizer, CharBPETokenizer
+from tokenizers import ByteLevelBPETokenizer, CharBPETokenizer, Tokenizer
+from tokenizers.models import BPE, Unigram
+from tokenizers.trainers import BpeTrainer, UnigramTrainer
 from os.path import join
 
 paths = [str(x) for x in Path("./Data/").glob("*.txt")]
@@ -9,8 +11,9 @@ model_dir = './BPE_spaced'
 
 
 def create_tokenizer():
-    #tokenizer = ByteLevelBPETokenizer()
-    tokenizer = CharBPETokenizer()
+    tokenizer = ByteLevelBPETokenizer()
+    #tokenizer = CharBPETokenizer()
+    #tokenizer = Tokenizer(Unigram())
     tokenizer.train(files=paths,
                     vocab_size=VOCAB_SIZE,
                     min_frequency=2,
@@ -35,7 +38,7 @@ def validate_tokenizer():
 
 
 def init_trainer():
-    from transformers import GPT2Model, GPT2Config,GPT2LMHeadModel
+    from transformers import GPT2Model, GPT2Config, GPT2LMHeadModel
     from transformers import GPT2Tokenizer
     config = GPT2Config(
         vocab_size=VOCAB_SIZE,
@@ -53,6 +56,7 @@ def init_trainer():
         file_path="./Data/train.en.txt",
         block_size=128,
     )
+    print(dataset[0])
     from transformers import DataCollatorForLanguageModeling
     data_collator = DataCollatorForLanguageModeling(
         tokenizer=tokenizer, mlm=False
