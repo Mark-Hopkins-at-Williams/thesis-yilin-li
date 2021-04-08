@@ -11,6 +11,8 @@ import logging
 logging.basicConfig(level = logging.INFO)
 logger = logging.getLogger()
 
+device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
+
 class Conv1D(nn.Module):
     def __init__(self, nx, nf):
         super().__init__()
@@ -128,7 +130,7 @@ class GPT2(nn.Module):
             module.weight.data.fill_(1.0)
 
     def forward(self, src, labels=None, pos_ids=None):
-        if pos_ids is None: pos_ids = torch.arange(0, src.size(-1)).unsqueeze(0)
+        if pos_ids is None: pos_ids = torch.arange(0, src.size(-1)).unsqueeze(0).to(device)
         inp = self.drop((self.wte(src) + self.wpe(pos_ids)))
         for i in range(self.nlayers): inp = self.h[i](inp)
         inp = self.ln_f(inp)
