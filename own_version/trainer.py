@@ -19,10 +19,9 @@ class OwnDataset(Dataset):
             lines = [line for line in f.read().splitlines() if (len(line) > 0 and not line.isspace())]
 
         self.examples = [tokenizer.encode(line) for line in lines]
-        max_length = max([len(e.ids) for e in self.examples])
-        print(max_length)
         for e in self.examples:
-            e.pad(length=max_length)
+            e.pad(length=256)
+            e.truncate(256)
         self.examples = [e.ids for e in self.examples]
 
     def __len__(self):
@@ -36,6 +35,7 @@ def create_tokenizer():
     tokenizer = Tokenizer(Unigram())
     trainer = UnigramTrainer(special_tokens=["<|endoftext|>"])
     tokenizer.enable_padding(pad_token="<|endoftext|>")
+    tokenizer.enable_truncation(256)
     tokenizer.train(paths, trainer)
     tokenizer.post_processor = TemplateProcessing(
         single="<|endoftext|> $A <|endoftext|>",
