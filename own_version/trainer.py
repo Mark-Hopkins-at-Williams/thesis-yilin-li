@@ -18,11 +18,12 @@ class OwnDataset(Dataset):
         with open(file_path, encoding="utf-8") as f:
             lines = [line for line in f.read().splitlines() if (len(line) > 0 and not line.isspace())]
 
-        self.examples = [tokenizer.encode(line) for line in lines]
-        for e in self.examples:
-            e.pad(length=256)
-            e.truncate(256)
-        self.examples = [e.ids for e in self.examples]
+        block_size = 128
+        texts = [tokenizer.encode(line) for line in lines]
+        text = sum([e.ids for e in texts], [])
+        total_length = len(text)
+        total_length = (total_length // block_size) * block_size  # get rid of remainder
+        self.examples = [text[i:i+block_size] for i in range(0, total_length, block_size)]
 
     def __len__(self):
         return len(self.examples)
@@ -58,7 +59,7 @@ def training():
 
     tokenizer = Tokenizer.from_file(model_dir + "/vocab.json")
     train_dataset = OwnDataset(tokenizer, "../Data/train.en.txt")
-    train_loader = DataLoader(train_dataset, batch_size=12, shuffle=False)
+    train_loader = DataLoader(train_dataset, batch_size=32, shuffle=False)
     n_batches = len(train_loader)
     optim = AdamW(model.parameters(), lr=5e-5)
     n_epochs = 1
