@@ -50,7 +50,7 @@ def training():
     from torch.utils.data import DataLoader
     from transformers import AdamW
 
-    device = torch.device('cuda:0') if torch.cuda.is_available() else torch.device('cpu')
+    device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
     model = GPT2()
     model.to(device)
