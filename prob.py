@@ -23,6 +23,7 @@ def show_prob(text):
 
 def show_output(text):
     input_ids = torch.tensor([tokenizer.encode(text)])
+    print(tokenizer.tokenize(text))
     with torch.no_grad():
         output = model(input_ids)
         print(output[0][0].shape)

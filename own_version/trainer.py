@@ -16,14 +16,13 @@ class OwnDataset(Dataset):
     def __init__(self, tokenizer, file_path):
 
         with open(file_path, encoding="utf-8") as f:
-            lines = [line for line in f.read().splitlines() if (len(line) > 0 and not line.isspace())]
-
+            text = f.read()
         block_size = 128
-        texts = [tokenizer.encode(line) for line in lines]
-        text = sum([e.ids for e in texts], [])
-        total_length = len(text)
-        total_length = (total_length // block_size) * block_size  # get rid of remainder
-        self.examples = [text[i:i+block_size] for i in range(0, total_length, block_size)]
+        tokenized_text = tokenizer.encode(text).ids  # gives a list of ids
+        self.examples = []
+        for i in range(0, len(tokenized_text) - block_size + 1, block_size):  # Truncate in block of block_size
+            self.examples.append(tokenized_text[i: i + block_size])
+        print(self.examples[0])
 
     def __len__(self):
         return len(self.examples)
@@ -38,12 +37,6 @@ def create_tokenizer():
     tokenizer.enable_padding(pad_token="<|endoftext|>")
     tokenizer.enable_truncation(256)
     tokenizer.train(paths, trainer)
-    tokenizer.post_processor = TemplateProcessing(
-        single="<|endoftext|> $A <|endoftext|>",
-        special_tokens=[
-            ("<|endoftext|>", tokenizer.token_to_id("<|endoftext|>")),
-        ],
-    )
     tokenizer.save(model_dir+"/vocab.json")
 
 
@@ -82,5 +75,5 @@ def training():
     print("=== FINISH TRAINING ===")
 
 if __name__ == "__main__":
-    #create_tokenizer()
+    create_tokenizer()
     training()
