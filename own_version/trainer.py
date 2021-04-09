@@ -52,7 +52,7 @@ def training():
 
     tokenizer = Tokenizer.from_file(model_dir + "/vocab.json")
     train_dataset = OwnDataset(tokenizer, "../Data/train.en.txt")
-    train_loader = DataLoader(train_dataset, batch_size=32, shuffle=False)
+    train_loader = DataLoader(train_dataset, batch_size=16, shuffle=False)
     n_batches = len(train_loader)
     optim = AdamW(model.parameters(), lr=5e-5)
     n_epochs = 1
