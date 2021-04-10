@@ -22,7 +22,6 @@ class OwnDataset(Dataset):
         self.examples = []
         for i in range(0, len(tokenized_text) - block_size + 1, block_size):  # Truncate in block of block_size
             self.examples.append(tokenized_text[i: i + block_size])
-        print(self.examples[0])
 
     def __len__(self):
         return len(self.examples)
@@ -54,6 +53,7 @@ def training():
     train_dataset = OwnDataset(tokenizer, "../Data/train.en.txt")
     train_loader = DataLoader(train_dataset, batch_size=16, shuffle=False)
     n_batches = len(train_loader)
+    print(n_batches)
     optim = AdamW(model.parameters(), lr=5e-5)
     n_epochs = 1
     print("=== STARTING TRAINING ===")
@@ -75,5 +75,5 @@ def training():
     print("=== FINISH TRAINING ===")
 
 if __name__ == "__main__":
-    create_tokenizer()
+    #create_tokenizer()
     training()
