@@ -58,11 +58,9 @@ def training():
     for epoch in range(n_epochs):
         for i, data in enumerate(train_loader, 0):
             optim.zero_grad()
-            input_ids = data
-            labels = input_ids.clone()
-            input_ids.to(device)
-            labels.to(device)
-            outputs = model(input_ids, labels=labels)
+            input_ids = data.copy().to(device)
+            labels = data.copy().to(device)
+            outputs = model(input_ids, labels)
             loss = outputs[0]
             loss.backward()
             optim.step()
