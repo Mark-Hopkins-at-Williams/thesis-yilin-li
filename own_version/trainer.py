@@ -62,7 +62,7 @@ def training():
             labels = input_ids.clone()
             input_ids.to(device)
             labels.to(device)
-            outputs = model(input_ids, labels)
+            outputs = model(input_ids, labels=labels)
             loss = outputs[0]
             loss.backward()
             optim.step()
