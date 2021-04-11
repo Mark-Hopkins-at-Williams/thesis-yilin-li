@@ -32,14 +32,14 @@ class OwnDataset(Dataset):
 
 def create_tokenizer():
     tokenizer = Tokenizer(Unigram())
-    trainer = UnigramTrainer(special_tokens=["<|endoftext|>"])
+    trainer = UnigramTrainer(special_tokens=["<|endoftext|>"], vocab_size=VOCAB_SIZE, min_frequency=2)
     tokenizer.train(paths, trainer)
     tokenizer.save(model_dir+"/vocab.json")
-
 
 def training():
     from torch.utils.data import DataLoader
     from transformers import AdamW
+    from transformers import get_linear_schedule_with_warmup
 
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
@@ -52,16 +52,21 @@ def training():
     train_loader = DataLoader(train_dataset, batch_size=16, shuffle=False)
     n_batches = len(train_loader)
     optim = AdamW(model.parameters(), lr=5e-5)
+    scheduler = get_linear_schedule_with_warmup(optim, 0, -1)
     n_epochs = 1
     print("=== STARTING TRAINING ===")
     for epoch in range(n_epochs):
         for i, data in enumerate(train_loader, 0):
             optim.zero_grad()
-            input_ids = data.to(device)
-            outputs = model(input_ids, input_ids)
+            input_ids = data
+            labels = input_ids.clone()
+            input_ids.to(device)
+            labels.to(device)
+            outputs = model(input_ids, labels)
             loss = outputs[0]
             loss.backward()
             optim.step()
+            scheduler.step()
             if i % 100 == 0:
                 print("Epoch {}, {:d}% \t train_loss: {:.2f}".format(
                     epoch + 1, int(100 * (i + 1) / n_batches),
