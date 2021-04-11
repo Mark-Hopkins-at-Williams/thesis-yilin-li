@@ -72,5 +72,5 @@ def training():
     print("=== FINISH TRAINING ===")
 
 if __name__ == "__main__":
-    create_tokenizer()
+    #create_tokenizer()
     training()
