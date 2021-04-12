@@ -53,7 +53,7 @@ def training():
     train_loader = DataLoader(train_dataset, batch_size=16, shuffle=False)
     n_batches = len(train_loader)
     optim = AdamW(model.parameters(), lr=5e-5)
-    #scheduler = get_linear_schedule_with_warmup(optim, 0, -1)
+    scheduler = get_linear_schedule_with_warmup(optim, 0, n_batches)
     n_epochs = 1
     print("=== STARTING TRAINING ===")
     for epoch in range(n_epochs):
@@ -67,11 +67,11 @@ def training():
             total_loss += loss.item()
             loss.backward()
             optim.step()
-            #scheduler.step()
+            scheduler.step()
             if i % 100 == 0:
-                print("Epoch {}, {:d}% \t train_loss: {:.2f}".format(
+                print("Epoch {}, {:d}% \t ave_loss: {:.2f}\tbatch_loss: {:.2f}".format(
                     epoch + 1, int(100 * (i + 1) / n_batches),
-                    total_loss/(i+1)))
+                    total_loss/(i+1), loss.item()))
 
     torch.save(model, model_dir+"/model.pt")
     model.eval()
