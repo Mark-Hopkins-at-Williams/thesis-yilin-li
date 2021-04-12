@@ -53,9 +53,9 @@ def training():
     train_loader = DataLoader(train_dataset, batch_size=16, shuffle=False)
     n_batches = len(train_loader)
     #optim = AdamW(model.parameters(), lr=5e-5)
-    optim = SGD(model.parameters(), lr=0.001, momentum=0.9)
-    scheduler = get_linear_schedule_with_warmup(optim, 0, n_batches)
-    n_epochs = 1
+    optim = SGD(model.parameters(), lr=5e-5, momentum=0.9)
+    n_epochs = 3
+    scheduler = get_linear_schedule_with_warmup(optim, 0, n_batches*n_epochs)
     print("=== STARTING TRAINING ===")
     for epoch in range(n_epochs):
         total_loss = 0.0
@@ -79,5 +79,5 @@ def training():
     print("=== FINISH TRAINING ===")
 
 if __name__ == "__main__":
-    #create_tokenizer()
+    create_tokenizer()
     training()
