@@ -27,7 +27,7 @@ def show_next(text):
     with torch.no_grad():
         outputs = model(input_ids)
         logits = outputs[0]
-        probs = torch.softmax(logits, 1)[0]
+        probs = torch.softmax(logits, 1)[-1]
         tops = torch.topk(probs, 5)
         result = {}
         for i in range(5):
@@ -36,7 +36,7 @@ def show_next(text):
             result[i+1] = (token, prob)
         print(result)
 
-show_next("Paris is the capital of ")
+show_next("professor says that research is ")
 
 
 
