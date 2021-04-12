@@ -7,7 +7,7 @@ from os.path import join
 
 paths = [str(x) for x in Path("./Data/").glob("*.txt")]
 VOCAB_SIZE = 52_000
-model_dir = './BPE_spaced'
+model_dir = './BBPE_spaced'
 
 
 def create_tokenizer():
