@@ -26,9 +26,8 @@ def show_next(text):
     input_ids = torch.tensor(tokenizer.encode(text).ids).to(device)
     with torch.no_grad():
         outputs = model(input_ids)
-        print(outputs[0][-1].shape)
         logits = outputs[0]
-        probs = torch.softmax(logits, 1)[-1]
+        probs = torch.softmax(logits, 1)[0]
         tops = torch.topk(probs, 5)
         result = {}
         for i in range(5):
