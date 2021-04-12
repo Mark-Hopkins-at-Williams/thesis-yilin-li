@@ -8,7 +8,7 @@ from tokenizers.trainers import BpeTrainer, UnigramTrainer
 from model import GPT2
 
 paths = [str(x) for x in Path("../Data/").glob("*.txt")]
-VOCAB_SIZE = 52_000
+VOCAB_SIZE = 50257
 model_dir = './UniLM_spaced'
 
 class OwnDataset(Dataset):

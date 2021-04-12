@@ -36,7 +36,7 @@ def show_next(text):
             result[i+1] = (token, prob)
         print(result)
 
-show_next("professor says that research is ")
+show_next("The course starts next")
 
 
 
