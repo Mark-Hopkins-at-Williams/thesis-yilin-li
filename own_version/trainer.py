@@ -45,7 +45,6 @@ def training():
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
     model = GPT2()
-    model.init_weights()
     model.to(device)
     model.train()
 
@@ -54,8 +53,8 @@ def training():
     train_loader = DataLoader(train_dataset, batch_size=16, shuffle=False)
     n_batches = len(train_loader)
     #optim = AdamW(model.parameters(), lr=5e-5)
-    optim = SGD(model.parameters(), lr=0.001, momentum=0.9)
-    #scheduler = get_linear_schedule_with_warmup(optim, 0, n_batches)
+    optim = SGD(model.parameters(), lr=0.0001, momentum=0.9)
+    scheduler = get_linear_schedule_with_warmup(optim, 0, n_batches)
     n_epochs = 1
     print("=== STARTING TRAINING ===")
     for epoch in range(n_epochs):
@@ -69,9 +68,9 @@ def training():
             total_loss += loss.item()
             loss.backward()
             optim.step()
-            #scheduler.step()
+            scheduler.step()
             if i % 100 == 0:
-                print("Epoch {}, {:d}% \t ave_loss: {:.2f}\tbatch_loss: {:.2f}".format(
+                print("Epoch {}, {:d}% \t ave_loss: {:.7f}\tbatch_loss: {:.7f}".format(
                     epoch + 1, int(100 * (i + 1) / n_batches),
                     total_loss/(i+1), loss.item()))
 
