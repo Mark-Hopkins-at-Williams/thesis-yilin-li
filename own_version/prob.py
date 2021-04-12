@@ -3,8 +3,9 @@ from tokenizers import Tokenizer
 
 model_dir = './UniLM_spaced'
 
+device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 tokenizer = Tokenizer.from_file(model_dir + "/vocab.json")
-model = torch.load(model_dir + "/model.pt")
+model = torch.load(model_dir + "/model.pt").to(device)
 model.eval()
 
 def show_prob(text):
@@ -22,7 +23,7 @@ def show_prob(text):
             print(f"Probability for the token \"{tokenizer.decode(token_id.item())}\" is {probability}")
 
 def show_next(text):
-    input_ids = torch.tensor(tokenizer.encode(text).ids)
+    input_ids = torch.tensor(tokenizer.encode(text).ids).to(device)
     with torch.no_grad():
         outputs = model(input_ids)
         print(outputs[0][-1].shape)
