@@ -103,7 +103,7 @@ def _get_clones(module, n):
 
 
 class GPT2(nn.Module):
-    def __init__(self, nlayers=12, n_ctx=1024, d_model=768, vcb_sz=50257):
+    def __init__(self, nlayers=12, n_ctx=1024, d_model=768, vcb_sz=50258):
         super(GPT2, self).__init__()
         self.nlayers = nlayers
         block = TransformerBlock(d_model=768, n_head=12, dropout=0.1)
