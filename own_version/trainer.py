@@ -53,8 +53,8 @@ def training():
     train_loader = DataLoader(train_dataset, batch_size=16, shuffle=False)
     n_batches = len(train_loader)
     #optim = AdamW(model.parameters(), lr=5e-5, weight_decay=0.001)
-    optim = SGD(model.parameters(), lr=5e-5, momentum=0.9, weight_decay=0.01)
-    n_epochs = 5
+    optim = SGD(model.parameters(), lr=8e-5, momentum=0.9, weight_decay=0.01)
+    n_epochs = 10
     scheduler = get_linear_schedule_with_warmup(optim, 0, n_batches*n_epochs)
     print("=== STARTING TRAINING ===")
     for epoch in range(n_epochs):
