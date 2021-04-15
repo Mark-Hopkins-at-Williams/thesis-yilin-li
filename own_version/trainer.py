@@ -6,7 +6,7 @@ from tokenizers.models import BPE, Unigram
 from tokenizers.trainers import BpeTrainer, UnigramTrainer
 from model import GPT2
 
-paths = [str(x) for x in Path("../Data_non_space/").glob("*.txt")]
+paths = [str(x) for x in Path("../Data_non/").glob("*.txt")]
 VOCAB_SIZE = 50257
 model_dir = './UniLM_non_spaced'
 
@@ -47,7 +47,7 @@ def training():
     model.train()
 
     tokenizer = Tokenizer.from_file(model_dir + "/vocab.json")
-    train_dataset = OwnDataset(tokenizer, "../Data_non_space/train_no_space.en.txt")
+    train_dataset = OwnDataset(tokenizer, "../Data_non/train_no_space.en.txt")
     train_loader = DataLoader(train_dataset, batch_size=16, shuffle=False)
     n_batches = len(train_loader)
     optim = SGD(model.parameters(), lr=8e-5, momentum=0.9, weight_decay=0.01)
