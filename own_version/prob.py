@@ -29,6 +29,7 @@ def show_next(text):
         logits = outputs[0]
         probs = torch.softmax(logits, 1)[-1]
         tops = torch.topk(probs, 5)
+        print(tops)
         result = {}
         for i in range(5):
             token = tokenizer.id_to_token(tops.indices[i].item())
@@ -36,7 +37,7 @@ def show_next(text):
             result[i+1] = (token, prob)
         print(result)
 
-show_next("The course starts next ")
+show_next("Paris is the capital of")
 
 
 
