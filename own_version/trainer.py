@@ -47,7 +47,7 @@ def training():
     model.train()
 
     tokenizer = Tokenizer.from_file(model_dir + "/vocab.json")
-    train_dataset = OwnDataset(tokenizer, "../Data_non_space/train.en.txt")
+    train_dataset = OwnDataset(tokenizer, "../Data_non_space/train_no_space.en.txt")
     train_loader = DataLoader(train_dataset, batch_size=16, shuffle=False)
     n_batches = len(train_loader)
     optim = SGD(model.parameters(), lr=8e-5, momentum=0.9, weight_decay=0.01)
