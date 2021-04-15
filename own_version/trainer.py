@@ -3,13 +3,12 @@ from torch.utils.data.dataset import Dataset
 from pathlib import Path
 from tokenizers import Tokenizer, ByteLevelBPETokenizer
 from tokenizers.models import BPE, Unigram
-from tokenizers.processors import TemplateProcessing
 from tokenizers.trainers import BpeTrainer, UnigramTrainer
 from model import GPT2
 
-paths = [str(x) for x in Path("../Data/").glob("*.txt")]
+paths = [str(x) for x in Path("../Data_non_space/").glob("*.txt")]
 VOCAB_SIZE = 50257
-model_dir = './UniLM_spaced'
+model_dir = './UniLM_non_spaced'
 
 class OwnDataset(Dataset):
 
@@ -48,7 +47,7 @@ def training():
     model.train()
 
     tokenizer = Tokenizer.from_file(model_dir + "/vocab.json")
-    train_dataset = OwnDataset(tokenizer, "../Data/train.en.txt")
+    train_dataset = OwnDataset(tokenizer, "../Data_non_space/train.en.txt")
     train_loader = DataLoader(train_dataset, batch_size=16, shuffle=False)
     n_batches = len(train_loader)
     optim = SGD(model.parameters(), lr=8e-5, momentum=0.9, weight_decay=0.01)
@@ -77,5 +76,5 @@ def training():
     print("=== FINISH TRAINING ===")
 
 if __name__ == "__main__":
-    #create_tokenizer()
+    create_tokenizer()
     training()

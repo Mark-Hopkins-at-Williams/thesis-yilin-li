@@ -1,7 +1,7 @@
 import torch
 from tokenizers import Tokenizer
 
-model_dir = './UniLM_spaced'
+model_dir = './UniLM_non_spaced'
 
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 tokenizer = Tokenizer.from_file(model_dir + "/vocab.json")
