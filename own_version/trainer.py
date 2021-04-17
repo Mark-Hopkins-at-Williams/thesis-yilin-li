@@ -8,7 +8,7 @@ from model import GPT2
 
 paths = [str(x) for x in Path("../Data_non/").glob("*.txt")]
 VOCAB_SIZE = 50257
-model_dir = './UniLM_non_spaced'
+model_dir = './BPE_non_spaced'
 
 class OwnDataset(Dataset):
 
@@ -30,8 +30,8 @@ class OwnDataset(Dataset):
 
 
 def create_tokenizer():
-    tokenizer = Tokenizer(Unigram())
-    trainer = UnigramTrainer(special_tokens=["<|endoftext|>"], vocab_size=VOCAB_SIZE, min_frequency=2)
+    tokenizer = Tokenizer(BPE())
+    trainer = BpeTrainer(special_tokens=["<|endoftext|>"], vocab_size=VOCAB_SIZE, min_frequency=2)
     tokenizer.train(paths, trainer)
     tokenizer.save(model_dir+"/vocab.json")
 
