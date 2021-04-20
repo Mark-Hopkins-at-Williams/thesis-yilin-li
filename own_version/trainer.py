@@ -66,7 +66,7 @@ def training():
             total_loss += loss.item()
             loss.backward()
             optim.step()
-            scheduler.step()
+            #scheduler.step()
             if i % 100 == 0:
                 print("Epoch {}, {:d}% \t ave_loss: {:.7f}\tbatch_loss: {:.7f}".format(
                     epoch + 1, int(100 * (i + 1) / n_batches),
