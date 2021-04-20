@@ -51,9 +51,9 @@ def training():
     train_loader = DataLoader(train_dataset, batch_size=16, shuffle=False)
     n_batches = len(train_loader)
     #optim = SGD(model.parameters(), lr=1e-4, momentum=0.9)
-    optim = AdamW(model.parameters(), lr=5e-5, weight_decay=0.01)
+    optim = AdamW(model.parameters(), lr=5e-5)
     n_epochs = 10
-    #scheduler = get_linear_schedule_with_warmup(optim, 0, n_batches*n_epochs)
+    scheduler = get_linear_schedule_with_warmup(optim, 0, n_batches*n_epochs)
     print("=== STARTING TRAINING ===")
     for epoch in range(n_epochs):
         total_loss = 0.0
@@ -66,7 +66,7 @@ def training():
             total_loss += loss.item()
             loss.backward()
             optim.step()
-            #scheduler.step()
+            scheduler.step()
             if i % 100 == 0:
                 print("Epoch {}, {:d}% \t ave_loss: {:.7f}\tbatch_loss: {:.7f}".format(
                     epoch + 1, int(100 * (i + 1) / n_batches),
