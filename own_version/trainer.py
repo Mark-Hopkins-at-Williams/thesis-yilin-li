@@ -6,9 +6,9 @@ from tokenizers.models import BPE, Unigram
 from tokenizers.trainers import BpeTrainer, UnigramTrainer
 from model import GPT2
 
-paths = [str(x) for x in Path("../Data_non/").glob("*.txt")]
+paths = [str(x) for x in Path("../Data/").glob("*.txt")]
 VOCAB_SIZE = 50257
-model_dir = './BPE_non_spaced'
+model_dir = './BPE_spaced'
 
 class OwnDataset(Dataset):
 
@@ -34,8 +34,9 @@ def create_tokenizer():
     trainer = BpeTrainer(special_tokens=["<|endoftext|>"], vocab_size=VOCAB_SIZE, min_frequency=2)
     tokenizer.train(paths, trainer)
     tokenizer.save(model_dir+"/vocab.json")
+    return tokenizer
 
-def training():
+def training(tok):
     from torch.utils.data import DataLoader
     from torch.optim import SGD
     from transformers import get_linear_schedule_with_warmup, AdamW
@@ -46,11 +47,12 @@ def training():
     model.to(device)
     model.train()
 
-    tokenizer = Tokenizer.from_file(model_dir + "/vocab.json")
-    train_dataset = OwnDataset(tokenizer, "../Data_non/train_no_space.en.txt")
+    #tokenizer = Tokenizer.from_file(model_dir + "/vocab.json")
+    tokenizer = tok
+    train_dataset = OwnDataset(tokenizer, "../Data/train.en.txt")
     train_loader = DataLoader(train_dataset, batch_size=16, shuffle=False)
     n_batches = len(train_loader)
-    optim = SGD(model.parameters(), lr=1e-4, momentum=0.9)
+    optim = SGD(model.parameters(), lr=1e-3, momentum=0.9)
     #optim = AdamW(model.parameters(), lr=5e-5)
     n_epochs = 5
     scheduler = get_linear_schedule_with_warmup(optim, 0, n_batches*n_epochs)
@@ -77,5 +79,5 @@ def training():
     print("=== FINISH TRAINING ===")
 
 if __name__ == "__main__":
-    #create_tokenizer()
-    training()
+    tok = create_tokenizer()
+    training(tok)
