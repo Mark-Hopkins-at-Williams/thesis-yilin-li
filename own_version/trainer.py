@@ -36,7 +36,7 @@ def create_tokenizer():
     tokenizer.save(model_dir+"/vocab.json")
     return tokenizer
 
-def training(tok):
+def training():
     from torch.utils.data import DataLoader
     from torch.optim import SGD
     from transformers import get_linear_schedule_with_warmup, AdamW
@@ -47,8 +47,7 @@ def training(tok):
     model.to(device)
     model.train()
 
-    #tokenizer = Tokenizer.from_file(model_dir + "/vocab.json")
-    tokenizer = tok
+    tokenizer = Tokenizer.from_file(model_dir + "/vocab.json")
     train_dataset = OwnDataset(tokenizer, "../Data/train.en.txt")
     train_loader = DataLoader(train_dataset, batch_size=16, shuffle=False)
     n_batches = len(train_loader)
@@ -79,5 +78,5 @@ def training(tok):
     print("=== FINISH TRAINING ===")
 
 if __name__ == "__main__":
-    tok = create_tokenizer()
-    training(tok)
+    #create_tokenizer()
+    training()
