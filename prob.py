@@ -44,7 +44,7 @@ def perplexity():
         end_loc = min(i + stride, encodings.input_ids.size(1))
         trg_len = end_loc - i  # may be different from stride on last loop
         input_ids = encodings.input_ids[:, begin_loc:end_loc].to(device)
-        target_ids = input_ids.clone()
+        target_ids = input_ids.clone().to(device)
         target_ids[:, :-trg_len] = -100
 
         with torch.no_grad():
