@@ -4,8 +4,8 @@ from transformers import GPT2Tokenizer, GPT2LMHeadModel
 model_dir = './BBPE_spaced'
 
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
-tokenizer = GPT2Tokenizer.from_pretrained(model_dir)
-model = GPT2LMHeadModel.from_pretrained(model_dir)
+tokenizer = GPT2Tokenizer.from_pretrained(model_dir).to(device)
+model = GPT2LMHeadModel.from_pretrained(model_dir).to(device)
 model.eval()
 
 def show_prob(text):
