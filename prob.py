@@ -30,11 +30,11 @@ def show_output(text):
         print(output[0][0].shape)
 
 def perplexity():
-    from datasets import load_dataset
+    file_path = './Data/test2012.txt'
     from tqdm import tqdm
-    test = load_dataset('wikitext', 'wikitext-2-raw-v1', split='test')
-    encodings = tokenizer('\n\n'.join(test['text']), return_tensors='pt')
-
+    with open(file_path, encoding="utf-8") as f:
+        test = f.read()
+    encodings = tokenizer(test, return_tensors='pt')
     max_length = model.config.n_positions
     stride = 128
 
