@@ -3,7 +3,8 @@ from transformers import GPT2Tokenizer, GPT2LMHeadModel
 
 model_dir = './BBPE_spaced'
 
-tokenizer = GPT2Tokenizer.from_pretrained(model_dir, max_len=512)
+device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
+tokenizer = GPT2Tokenizer.from_pretrained(model_dir)
 model = GPT2LMHeadModel.from_pretrained(model_dir)
 model.eval()
 
@@ -28,7 +29,34 @@ def show_output(text):
         output = model(input_ids)
         print(output[0][0].shape)
 
-show_output("hello world")
+def perplexity():
+    from nlp import load_dataset
+    from tqdm import tqdm
+    test = load_dataset('wikitext', 'wikitext-2-raw-v1', split='test')
+    encodings = tokenizer('\n\n'.join(test['text']), return_tensors='pt')
 
+    max_length = model.config.n_positions
+    stride = 128
+
+    lls = []
+    for i in tqdm(range(0, encodings.input_ids.size(1), stride)):
+        begin_loc = max(i + stride - max_length, 0)
+        end_loc = min(i + stride, encodings.input_ids.size(1))
+        trg_len = end_loc - i  # may be different from stride on last loop
+        input_ids = encodings.input_ids[:, begin_loc:end_loc].to(device)
+        target_ids = input_ids.clone()
+        target_ids[:, :-trg_len] = -100
+
+        with torch.no_grad():
+            outputs = model(input_ids, labels=target_ids)
+            log_likelihood = outputs[0] * trg_len
+
+        lls.append(log_likelihood)
+
+    ppl = torch.exp(torch.stack(lls).sum() / end_loc)
+    return ppl
+
+print(perplexity())
+#show_output("hello world")
 #show_prob("the professor says that doing research is fun")
 #show_prob("the prefassor say that doing research is fun")
