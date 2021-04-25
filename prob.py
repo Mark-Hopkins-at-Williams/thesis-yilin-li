@@ -30,7 +30,7 @@ def show_output(text):
         print(output[0][0].shape)
 
 def perplexity():
-    from nlp import load_dataset
+    from datasets import load_dataset
     from tqdm import tqdm
     test = load_dataset('wikitext', 'wikitext-2-raw-v1', split='test')
     encodings = tokenizer('\n\n'.join(test['text']), return_tensors='pt')
