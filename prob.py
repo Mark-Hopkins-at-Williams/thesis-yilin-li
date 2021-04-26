@@ -30,7 +30,7 @@ def show_output(text):
         print(output[0][0].shape)
 
 def perplexity():
-    file_path = './Data_non/test2014_nonspace.txt'
+    file_path = './Data_non/test2015_nonspace.txt'
     from tqdm import tqdm
     with open(file_path, encoding="utf-8") as f:
         test = f.read()
