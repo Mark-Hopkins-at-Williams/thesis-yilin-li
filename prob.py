@@ -1,7 +1,7 @@
 import torch
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
 
-model_dir = './BBPE_nonspaced'
+model_dir = './BBPE_non_spaced'
 
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 tokenizer = GPT2Tokenizer.from_pretrained(model_dir)
