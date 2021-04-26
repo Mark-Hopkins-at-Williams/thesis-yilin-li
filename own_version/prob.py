@@ -44,7 +44,7 @@ def perplexity():
     with open(file_path, encoding="utf-8") as f:
         test = f.read()
     encodings = tokenizer.encode(test)
-    max_length = 1024
+    max_length = 128
     stride = 128
 
     lls = []
