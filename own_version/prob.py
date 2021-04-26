@@ -1,7 +1,7 @@
 import torch
 from tokenizers import Tokenizer
 
-model_dir = './UniLM_spaced'
+model_dir = './UniLM_non_spaced'
 
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 tokenizer = Tokenizer.from_file(model_dir + "/vocab.json")
@@ -38,7 +38,7 @@ def show_next(text):
         print(result)
 
 def perplexity():
-    file_path = '../Data/test2015.txt'
+    file_path = '../Data_non/test2012_nonspace.txt'
     from tqdm import tqdm
     import torch
     with open(file_path, encoding="utf-8") as f:
