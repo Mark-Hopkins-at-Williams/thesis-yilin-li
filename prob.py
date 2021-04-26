@@ -1,7 +1,7 @@
 import torch
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
 
-model_dir = './BBPE_spaced'
+model_dir = './BBPE_non_spaced'
 
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 tokenizer = GPT2Tokenizer.from_pretrained(model_dir)
@@ -30,7 +30,7 @@ def show_output(text):
         print(output[0][0].shape)
 
 def perplexity():
-    file_path = './Data/test2015.txt'
+    file_path = './Data_non/test2012_nonspace.txt'
     from tqdm import tqdm
     with open(file_path, encoding="utf-8") as f:
         test = f.read()
