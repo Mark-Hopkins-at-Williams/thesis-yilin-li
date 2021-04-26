@@ -38,7 +38,7 @@ def show_next(text):
         print(result)
 
 def perplexity():
-    file_path = '../Data_non/test2012_nonspace.txt'
+    file_path = '../Data_non/test2013_nonspace.txt'
     from tqdm import tqdm
     import torch
     with open(file_path, encoding="utf-8") as f:
