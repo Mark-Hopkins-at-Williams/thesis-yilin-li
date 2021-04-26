@@ -30,12 +30,12 @@ def show_output(text):
         print(output[0][0].shape)
 
 def perplexity():
-    file_path = './Data/test2015.txt'
+    file_path = './Data/test2012.txt'
     from tqdm import tqdm
     with open(file_path, encoding="utf-8") as f:
         test = f.read()
     encodings = tokenizer(test, return_tensors='pt')
-    max_length = model.config.n_positions
+    max_length = 128
     stride = 128
 
     lls = []
@@ -44,6 +44,7 @@ def perplexity():
         end_loc = min(i + stride, encodings.input_ids.size(1))
         trg_len = end_loc - i  # may be different from stride on last loop
         input_ids = encodings.input_ids[:, begin_loc:end_loc].to(device)
+        print(input_ids.size())
         target_ids = input_ids.clone().to(device)
         target_ids[:, :-trg_len] = -100
 
